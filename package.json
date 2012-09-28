@@ -1,0 +1,25 @@
+{
+  "name": "GBN",
+  "description": "Gitabitan on demand",
+  "version": "0.1.0",
+  "author": "Subho Sankar Banerjee <subs.zero@gmail.com>",
+  "keywords": [
+	"gbn", "tagore", "rabindranath", "gitobitan", "bengali"
+  ],
+  "engines": {
+	"node": ">=0.4.9 < 0.7.0"
+  },
+  "dependencies": {
+	"commander": "0.4.x",
+	"express": "2.5.x",
+	"socket.io": "0.9.x"
+  },
+  "bin": {
+	"gbn": "./main.js"
+  },
+	"scripts": {
+		"start": "./startServer.js"
+	},
+	"preferGlobal": "true",
+  "private": "true"
+}

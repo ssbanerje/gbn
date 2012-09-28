@@ -1,0 +1,181 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>	  <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>	  <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]> <html class="no-js" lang="en"> <![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<meta name="description" content="An online repository of all songs composed by Rabindranath Tagore">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>GBN • The Online Gitobitan Repository</title>
+		<link rel="stylesheet" type="text/css" href="/scripts/base.css">
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-33437564-1']);
+			_gaq.push(['_trackPageview']);
+			
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</head>
+
+	<body>
+	<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+		<div>
+			<section id="gbn">
+				<header id="header">
+					<h1 id="main-heading">গীতবিতান</h1>
+					<input id="search-field" type="text" value='{"name": "abc"}' placeholder="JSON Query"/>
+				</header>
+				<section id="main">
+					<ul id="result-list"></ul>
+				</section>
+				<footer id="footer" style="display: none !important;">
+					<button class="clear-results" id="toggle-button">Toggle</button>
+					<button class="clear-results" id="clear-results">Clear<span id='query-nos'></span></button>
+				</footer>
+			</section>
+			<div id='song-details' style='display: none !important;'>
+				<section class='box' id='details'></section>
+				<section class='box' id='lyrics'></section>
+				<section class='box' id='notation'></section>
+				<section class='box' id='songs'></section>
+			</div>
+			<footer id="info">
+				<p>
+					<span id='disclaimer'>Disclaimer</span> •
+					<span id='qquery'>Qualified Query</span>
+				</p>
+			<p>v0.1.0 • Subho Sankar Banerjee</p>
+			</footer>
+		</div>
+		<div class="overlay" id="disclaimer-message">
+			<div class="message">
+				<div class="close">X</div>
+				<h2> Disclaimer </h2>
+				<p>This site contains information on the songs of Rabindranath Tagore (1861 - 1941).</p>
+				<p>The contents of this site may be used only for educational and research purposes.</p>
+				<p>It is not the intent nor the purpose of this site to promote or be associated with any commercial venture related to Tagore's work. The contents of this site are public and free for all.</p>
+				<p>By accessing this site, you agree to make fair use of its contents solely for research and education in an ethical and appropriate manner. You also agree not to make any commercial use, pressed or implied, of the contents of this website. Finally, by accessing these pages, you agree not to hold the developers and owner of this website liable for any damage arising directly or indirectly from the use of these pages.</p>
+			</div>
+		</div>
+		<div class="overlay" id="qualified-message">
+			<div class="message">
+				<div class="close">X</div>
+				<h2> Qualified Queries </h2>
+				<p>The site can be used to query the entire collection of songs written by Rabindranath Tagore.</p>
+				<p>Queries are made in a simple JSON based query language. Songs can be searched on the basis of <i>name</i>, <i>raag</i>, <i>taal</i>, <i>parjaay</i>. Queries can be made using all these keys or a single one. Here is a sample query - </p>
+<pre>
+{  <span class="category">"name"</span>:<span class="value">"aac"</span>  <div class="use-query" data='{"name":"aac"}'>Use Query</div>}</pre>
+				<p>This will match all songs whose name starts with <i>"aac"</i>. A more complicated query can be the following - </p>
+<pre>
+{
+  <span class="category">"name"</span>:<span class="value">"aac"</span>,
+  <span class="category">"raag"</span>:<span class="value">"Bhairavi"</span>,
+  <span class="category">"taal"</span>:<span class="value">"Dadra"</span>,
+  <span class="category">"parjaay"</span>:<span class="value">"Prem"</span>  <div class="use-query" data='{"name":"aac", "raag":"Bhairavi", "taal":"Dadra", "parjaay":"Prem"}'>Use Query</div>
+}</pre>
+				<p>This will match all songs whose name starts with <i>"aac"</i>, of raag <i>"Bhairavi"</i>, of taal <i>"Dadra"</i> and parjaay <i>"Prem"</i>. However be careful that Bangla transliterations in English are not always universal.</p>
+			</div>
+		</div>
+	</body>
+
+	<script src="/scripts/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+
+	<script type='text/javascript'>
+	var socket = io.connect(window.location.origin);
+	var results = null;
+
+	$('#search-field').keypress(function(e) {
+		if (e.which == 13) {
+			var jsonQuery = null;
+			try {
+				jsonQuery = JSON.parse(this.value)
+			} catch (err) {
+				alert(err);
+			}
+			if(jsonQuery != null) {
+				socket.emit('query', jsonQuery);
+			}
+		}
+	});
+
+
+	$('#main-heading').click(clearResults);
+
+	$('#toggle-button').click(toggleResults);
+
+	$('#clear-results').click(clearResults);
+
+	$('#disclaimer').click(function () {
+		$('#disclaimer-message').fadeIn(200);
+	});
+
+	$('#qquery').click(function () {
+		$('#qualified-message').fadeIn(200);
+	});
+	
+	$('.use-query').click(function () {
+		$('#search-field').val(this.getAttribute('data'));
+		$('.overlay').fadeOut(200);
+	});
+
+	$('.close').click(function () {
+		$('.overlay').fadeOut(200);
+	});
+
+	socket.on('queryResponse', function(data){
+		$('#query-nos').html('('+data.length+')');
+		if(data.length == 0) {
+			$('#footer').show()
+			$('#result-list').slideUp()
+			$('#result-list').html('');
+		}
+		clearSongDetails();
+		var htmlString = '';
+		results = data;
+		for(var i in data) {
+				htmlString = htmlString + '<li value="'+i+'" onclick="showResults(this.value)">'+data[i]['name']+'</li>';
+		}
+		$('#result-list').html(htmlString);
+		$('#footer').show()
+		$('#result-list').slideDown()
+	});
+
+	function showResults(idx) {
+		$('#details').html('<ul><li><b>Name:</b> '+results[idx]['name']+'</li>'
+							+'<li><b>Taal:</b> '+results[idx]['taal']+'</li>'
+							+'<li><b>Raag:</b> '+results[idx]['raag']+'</li>'
+							+'<li><b>Parjaay:</b> '+results[idx]['parjaay']+'</li></ul>');
+		jQuery.get(results[idx]['lyrics'], function(data) {
+				$('#lyrics').html(data);
+		});
+		$('#notation').html('<img src="/'+results[idx]['notation']+'" width="100%" alt="Lyrics..."/>');
+	  	$('#songs').html('<iframe width="100%" height="300px"'
+	  					+' src="http://www.youtube.com/embed/?listType=search&list='+results[idx]['name'].replace(/ /g,'+')
+	  					+'+tagore+bengali&showinfo=1" frameborder="0" allowfullscreen></iframe>');
+		$('#song-details').show('fast');
+	}
+
+	function toggleResults() {
+	  $('#result-list').slideToggle()
+	}
+
+	function clearResults() {
+		$('#result-list').slideUp()
+		$('#footer').hide()
+		clearSongDetails();
+	}
+
+	function clearSongDetails() {
+	  $('#song-details').hide('fast');
+	  $('#songs').html('');
+	}
+	</script>
+
+</html>

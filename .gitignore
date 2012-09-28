@@ -1,0 +1,27 @@
+#NodeJS
+node_modules
+
+# Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+#Linux
+.*
+!.gitignore
+*~
+
+#Editors
+.*.sw[a-z]
+*.un~
+Session.vim
+.netrwhist
+*.tmproj
+*.tmproject
+tmtags
+/*.sublime-project
+*.sublime-workspace
