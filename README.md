@@ -10,21 +10,26 @@ This is a web portal providing easy access to entire corpus of songs written by 
 ##Installation
 
 ###On the cloud
-The (app)[http://gbn.nodester.com/] is deployed on nodester. This is generally the latest version of the app, so it is best to use this.
+The [app](http://gbn.nodester.com/) is deployed on nodester. This is generally the latest version of the app, so it is best to use this.
 
 ###Locally
 But if you want to run it yourself, you will need to -
 
 * Install NodeJS
 * Clone the repository
+
 ```bash
 git clone https://github.com/subszero/gbn.git
 ```
+
 * Download all dependencies
+
 ```bash
 npm install
 ```
+
 * Run the server
+
 ```bash
 node main.js server
 ```
