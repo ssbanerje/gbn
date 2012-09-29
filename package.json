@@ -19,7 +19,7 @@
 	"gbn": "./main.js"
   },
 	"scripts": {
-		"start": "./startServer.js"
+		"start": "./server.js"
 	},
 	"preferGlobal": "true",
   "private": "true"
