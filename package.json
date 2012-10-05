@@ -4,22 +4,21 @@
   "version": "0.1.0",
   "private": true,
   "author": "Subho Sankar Banerjee <subs.zero@gmail.com>",
-  "keywords": [
-	"gbn", "tagore", "rabindranath", "gitobitan", "bengali"
-  ],
+  "keywords": [	"gbn", "tagore", "rabindranath", "gitobitan", "bengali" ],
   "engines": {
-	"node": ">=0.4.9 < 0.7.0"
+		"node": ">= 0.7.0"
   },
   "dependencies": {
-	"commander": "0.4.x",
-	"express": "2.5.x",
-	"socket.io": "0.9.x"
+		"commander": "*",
+		"express": "3.x",
+    "ejs": "*",
+		"socket.io": "*"
   },
   "bin": {
-	"gbn": "./main.js"
+		"gbn": "./app.js start"
   },
 	"scripts": {
-		"start": "./startServer.js"
+		"start": "./app.js server"
 	},
 	"preferGlobal": "true",
   "private": "true"
