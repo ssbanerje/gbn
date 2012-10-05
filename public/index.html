@@ -14,7 +14,7 @@
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-33437564-1']);
 			_gaq.push(['_trackPageview']);
-			
+
 			(function() {
 				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
@@ -69,15 +69,13 @@
 				<h2> Qualified Queries </h2>
 				<p>The site can be used to query the entire collection of songs written by Rabindranath Tagore.</p>
 				<p>Queries are made in a simple JSON based query language. Songs can be searched on the basis of <i>name</i>, <i>raag</i>, <i>taal</i>, <i>parjaay</i>. Queries can be made using all these keys or a single one. Here is a sample query - </p>
-<pre>
-{  <span class="category">"name"</span>:<span class="value">"aac"</span>  <div class="use-query" data='{"name":"aac"}'>Use Query</div>}</pre>
+<pre>{ <span class="category">"name"</span>:<span class="value">"aac"</span>  <div class="use-query" data='{"name":"aac"}'>Use Query</div>}</pre>
 				<p>This will match all songs whose name starts with <i>"aac"</i>. A more complicated query can be the following - </p>
-<pre>
-{
-  <span class="category">"name"</span>:<span class="value">"aac"</span>,
-  <span class="category">"raag"</span>:<span class="value">"Bhairavi"</span>,
-  <span class="category">"taal"</span>:<span class="value">"Dadra"</span>,
-  <span class="category">"parjaay"</span>:<span class="value">"Prem"</span>  <div class="use-query" data='{"name":"aac", "raag":"Bhairavi", "taal":"Dadra", "parjaay":"Prem"}'>Use Query</div>
+<pre>{
+	<span class="category">"name"</span>:<span class="value">"aac"</span>,
+	<span class="category">"raag"</span>:<span class="value">"Bhairavi"</span>,
+	<span class="category">"taal"</span>:<span class="value">"Dadra"</span>,
+	<span class="category">"parjaay"</span>:<span class="value">"Prem"</span>  <div class="use-query" data='{"name":"aac", "raag":"Bhairavi", "taal":"Dadra", "parjaay":"Prem"}'>Use Query</div>
 }</pre>
 				<p>This will match all songs whose name starts with <i>"aac"</i>, of raag <i>"Bhairavi"</i>, of taal <i>"Dadra"</i> and parjaay <i>"Prem"</i>. However be careful that Bangla transliterations in English are not always universal.</p>
 			</div>
@@ -91,7 +89,7 @@
 	var socket = io.connect(window.location.origin);
 	var results = null;
 
-	$('#search-field').keypress(function(e) {
+	$('#search-field').keypress(function (e) {
 		if (e.which == 13) {
 			var jsonQuery = null;
 			try {
@@ -129,7 +127,7 @@
 		$('.overlay').fadeOut(200);
 	});
 
-	socket.on('queryResponse', function(data){
+	socket.on('queryResponse', function (data){
 		$('#query-nos').html('('+data.length+')');
 		if(data.length == 0) {
 			$('#footer').show()
@@ -149,16 +147,16 @@
 
 	function showResults(idx) {
 		$('#details').html('<ul><li><b>Name:</b> '+results[idx]['name']+'</li>'
-							+'<li><b>Taal:</b> '+results[idx]['taal']+'</li>'
-							+'<li><b>Raag:</b> '+results[idx]['raag']+'</li>'
-							+'<li><b>Parjaay:</b> '+results[idx]['parjaay']+'</li></ul>');
-		jQuery.get(results[idx]['lyrics'], function(data) {
+							+'<li><b>Taal:</b> '+results[idx].taal+'</li>'
+							+'<li><b>Raag:</b> '+results[idx].raag+'</li>'
+							+'<li><b>Parjaay:</b> '+results[idx].parjaay+'</li></ul>');
+		$.get(results[idx]['lyrics'], function(data) {
 				$('#lyrics').html(data);
 		});
-		$('#notation').html('<img src="/'+results[idx]['notation']+'" width="100%" alt="Lyrics..."/>');
-	  	$('#songs').html('<iframe width="100%" height="300px"'
-	  					+' src="http://www.youtube.com/embed/?listType=search&list='+results[idx]['name'].replace(/ /g,'+')
-	  					+'+tagore+bengali&showinfo=1" frameborder="0" allowfullscreen></iframe>');
+		$('#notation').html('<img src="/'+results[idx]notation+'" width="100%" alt="Lyrics..."/>');
+			$('#songs').html('<iframe width="100%" height="300px"'
+							+' src="http://www.youtube.com/embed/?listType=search&list='+results[idx].name.replace(/ /g,'+')
+							+'+tagore+bengali&showinfo=1" frameborder="0" allowfullscreen></iframe>');
 		$('#song-details').show('fast');
 	}
 
@@ -173,8 +171,8 @@
 	}
 
 	function clearSongDetails() {
-	  $('#song-details').hide('fast');
-	  $('#songs').html('');
+		$('#song-details').hide('fast');
+		$('#songs').html('');
 	}
 	</script>
 
