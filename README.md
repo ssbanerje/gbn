@@ -54,7 +54,7 @@ This will match all songs whose name starts with "aac". A more complicated query
   "name":"aac",
   "raag":"Bhairavi",
   "taal":"Dadra",
-  "parjaay":"Prem"  Use Query
+  "parjaay":"Prem"
 }
 ```
 
