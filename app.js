@@ -10,7 +10,6 @@
 var program = require('commander');
 var fs = require('fs');
 var child_process = require('child_process');
-var database = require('./server/database.js');
 
 function openFile(file) {
 	var browser;
@@ -35,6 +34,7 @@ program
 	.description('Check to see if the database is working correctly')
 	.action(function () {
     var path = require('path');
+    var database = require('./database.js');
 		var manifestFile = __dirname+'/raw-data/manifest.json';
 		path.exists(manifestFile, function (exists) {
 		if(exists) {
@@ -51,6 +51,7 @@ program
 	.description('Query the system without starting a server. Each query must be in JSON format')
 	.action(function (string) {
 		var i, results = database.queryDB(string);
+    var database = require('./database.js');
 		console.log(JSON.stringify(results, null, '\t'));
 		for(i in results) {
 			if(program.lyrics) {
@@ -107,6 +108,7 @@ program
 
 		var io = require('socket.io').listen(server);
 		io.set('log level', 2);
+    var database = require('./database.js');
 		setInterval(database.updateManifest, 600000);
 
 		io.sockets.on('connection', function(socket){
