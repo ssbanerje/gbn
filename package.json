@@ -1,25 +1,25 @@
 {
-  "name": "GBN",
-  "description": "Gitabitan on demand",
-  "version": "0.1.1",
-  "private": true,
-  "author": "Subho Sankar Banerjee <subs.zero@gmail.com>",
-  "keywords": [	"gbn", "tagore", "rabindranath", "gitobitan", "bengali" ],
-  "engines": {
+	"name": "GBN",
+	"description": "Gitabitan on demand",
+	"version": "0.1.1",
+	"private": true,
+	"author": "Subho Sankar Banerjee <subs.zero@gmail.com>",
+	"keywords": [	"gbn", "tagore", "rabindranath", "gitobitan", "bengali" ],
+	"engines": {
 		"node": ">= 0.8.0"
-  },
-  "dependencies": {
+	},
+	"dependencies": {
 		"commander": "*",
 		"express": "3.x",
-    "ejs": "*",
+		"ejs": "*",
 		"socket.io": "*"
-  },
-  "bin": {
+	},
+	"bin": {
 		"gbn": "./app.js"
-  },
+	},
 	"scripts": {
 		"start": "./app.js server"
 	},
 	"preferGlobal": "true",
-  "private": "true"
+	"private": "true"
 }
