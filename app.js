@@ -1,10 +1,8 @@
 #!/usr/bin/env node
 
 /*
- *
  * The main command line interface for the project
  * Run this as a server or as stand-alone application
- *
  */
 
 var program = require('commander');
@@ -21,14 +19,14 @@ function openFile (file) {
 	child_process.spawn(browser, [file]);
 }
 
-function createServer () {
+function createServer (PORT) {
 	var express = require('express');
 	var http = require('http');
 	var path = require('path');
 	var app = express();
 
 	app.configure(function () {
-		app.set('port', process.env.app_port || 3000);
+		app.set('port', process.env.app_port || PORT);
 		app.set('views', __dirname + '/views');
 		app.set('view engine', 'ejs');
 		app.use(express.favicon());
@@ -76,23 +74,25 @@ var packageJSON = JSON.parse(fs.readFileSync(__dirname+'/package.json', 'utf-8')
 program
 	.version(packageJSON.version)
 	.option('-l, --lyrics', 'Show lyrics when running query')
-	.option('-n, --notation', 'Show notation when running query');
+	.option('-n, --notation', 'Show notation when running query')
+	.option('-b, --browser', 'Show page in a browser after starting server');
 
 // Check the manifest
 program
 	.command('check-db')
 	.description('Check to see if the database is working correctly')
 	.action(function () {
-    var path = require('path');
-    var database = require('./database.js');
+		var path = require('path');
+		var database = require('./database.js');
 		var manifestFile = __dirname+'/raw-data/manifest.json';
 		path.exists(manifestFile, function (exists) {
-		if(exists) {
-			console.log(JSON.parse(fs.readFileSync(manifestFile, 'utf-8')));
-			console.log('Database has been and verified!');
-		} else {
-			throw new Exception('Database could not be verified!');
-		}});
+			if (exists) {
+				console.log(JSON.parse(fs.readFileSync(manifestFile, 'utf-8')));
+				console.log('Database has been and verified!');
+			} else {
+				throw new Exception('Database could not be verified!');
+			}
+		});
 	});
 
 // Perform query from command line
@@ -104,11 +104,11 @@ program
     var database = require('./database.js');
 		console.log(JSON.stringify(results, null, '\t'));
 		for(i in results) {
-			if(program.lyrics) {
+                        if (program.lyrics) {
 				console.log('Opening file ' +__dirname+'/'+results[i].lyrics);
 				openFile(__dirname + '/'+ results[i].lyrics);
 			}
-			if(program.notation) {
+                        if (program.notation) {
 				console.log('Opening file ' +__dirname+'/'+results[i].notation);
 				openFile(__dirname + '/' + results[i].notation);
 			}
@@ -118,25 +118,18 @@ program
 // Start server
 program
 	.command('server')
-	.description('Start server on 8080')
+	.description('Start a HTTP server')
 	.action(function () {
-		var cluster = require('cluster');
-		var i;
-
-		if( cluster.isMaster ) {
-			for(i=0; i<require('os').cpus().length; i++) {
-				cluster.fork();
-			}
-			cluster.on('exit', function(worker, code, signal) {
-				var exitCode = worker.process.exitCode;
-				console.log('Worker ' + worker.process.pid + ' died ('+exitCode+'). Restarting...');
-				cluster.fork();
-			});
-		} else {
-			createServer();
+		createServer(3000);
+		if (program.browser) {
+			openFile('http://localhost:3000/');
 		}
 	});
 
 // Lets get started
 program.parse(process.argv);
 
+// Fallback - Display help
+if (!program.args.length) {
+        program.outputHelp();
+}

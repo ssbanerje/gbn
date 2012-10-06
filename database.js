@@ -9,7 +9,7 @@ function _grep (elems, callback, inv) {
 	inv = !!inv;
 	for(i=0, length=elems.length; i<length; i++) {
 		retVal = !!callback(elems[i], i);
-		if(inv !== retVal) {
+                if (inv !== retVal) {
 			ret.push(elems[i]);
 		}
 	}
@@ -25,13 +25,13 @@ exports.updateManifest = _getLatestManifest;
 // Query the manifest file with a JSON object
 function _query (query) {
   var results, queryBy;
-	if(manifest === null) {
+        if (manifest === null) {
 	_getLatestManifest();
   }
 	results = manifest;
 	for(queryBy in query) {
 		results = _grep(results, function (a) {
-			if(a[queryBy] && a[queryBy].search(new RegExp(query[queryBy])) === 0) {
+                        if (a[queryBy] && a[queryBy].search(new RegExp(query[queryBy])) === 0) {
 				return true;
 			}
 			return false;
