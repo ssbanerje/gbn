@@ -11,7 +11,7 @@ var program = require('commander');
 var fs = require('fs');
 var child_process = require('child_process');
 
-function openFile(file) {
+function openFile (file) {
 	var browser;
 	switch(process.platform) {
 		case "win32": browser = "start"; break;
@@ -19,6 +19,56 @@ function openFile(file) {
 		default: browser = "xdg-open"; break;
 	}
 	child_process.spawn(browser, [file]);
+}
+
+function createServer () {
+	var express = require('express');
+	var http = require('http');
+	var path = require('path');
+	var app = express();
+
+	app.configure(function () {
+		app.set('port', process.env.app_port || 3000);
+		app.set('views', __dirname + '/views');
+		app.set('view engine', 'ejs');
+		app.use(express.favicon());
+		app.use(express.logger('dev'));
+		app.use(express.bodyParser());
+		app.use(express.methodOverride());
+		app.use(express.cookieParser('onlinegitobitan@gbn'));
+		app.use(express.session());
+		app.use(app.router);
+		app.use(express.static(path.join(__dirname, 'public')));
+		app.use(function (req, res, next) {
+			if (req.accepts('html')) {
+				res.status(404).render('404', { url: req.url });
+				return;
+			}
+			if (req.accepts('json')) {
+				res.send(404, { error: 'Not found' });
+				return;
+			}
+			res.type('txt').send(404, 'Not found');
+		});
+	});
+	app.configure('development', function () {
+		app.use(express.errorHandler());
+	});
+	var server = http.createServer(app).listen(app.get('port'), function () {
+		console.log("Express HTTP server listening on port " + app.get('port'));
+	});
+
+	var io = require('socket.io').listen(server);
+	io.set('log level', 2);
+  var database = require('./database.js');
+	setInterval(database.updateManifest, 600000);
+
+	io.sockets.on('connection', function(socket){
+		socket.on('query', function(data){
+			var results = database.query(data);
+			socket.emit('queryResponse', results);
+		});
+	});
 }
 
 // Set stuff for help
@@ -70,54 +120,21 @@ program
 	.command('server')
 	.description('Start server on 8080')
 	.action(function () {
-		var express = require('express');
-		var http = require('http');
-		var path = require('path');
-		var app = express();
+		var cluster = require('cluster');
+		var i;
 
-		app.configure(function () {
-			app.set('port', process.env.app_port || 3000);
-			app.set('views', __dirname + '/views');
-			app.set('view engine', 'ejs');
-			app.use(express.favicon());
-			app.use(express.logger('dev'));
-			app.use(express.bodyParser());
-			app.use(express.methodOverride());
-			app.use(express.cookieParser('onlinegitobitan@gbn'));
-			app.use(express.session());
-			app.use(app.router);
-			app.use(express.static(path.join(__dirname, 'public')));
-			app.use(function (req, res, next) {
-				if (req.accepts('html')) {
-					res.status(404).render('404', { url: req.url });
-					return;
-				}
-				if (req.accepts('json')) {
-					res.send(404, { error: 'Not found' });
-					return;
-				}
-				res.type('txt').send(404, 'Not found');
+		if( cluster.isMaster ) {
+			for(i=0; i<require('os').cpus().length; i++) {
+				cluster.fork();
+			}
+			cluster.on('exit', function(worker, code, signal) {
+				var exitCode = worker.process.exitCode;
+				console.log('Worker ' + worker.process.pid + ' died ('+exitCode+'). Restarting...');
+				cluster.fork();
 			});
-		});
-		app.configure('development', function () {
-			app.use(express.errorHandler());
-		});
-		var server = http.createServer(app).listen(app.get('port'), function () {
-			console.log("Express HTTP server listening on port " + app.get('port'));
-		});
-
-		var io = require('socket.io').listen(server);
-		io.set('log level', 2);
-    var database = require('./database.js');
-		setInterval(database.updateManifest, 600000);
-
-		io.sockets.on('connection', function(socket){
-			socket.on('query', function(data){
-				var results = database.query(data);
-				socket.emit('queryResponse', results);
-			});
-		});
-		openFile('http://localhost:'+app.get('port'));
+		} else {
+			createServer();
+		}
 	});
 
 // Lets get started
