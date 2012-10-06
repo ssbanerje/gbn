@@ -124,10 +124,14 @@ program
 		var i;
 
 		if( cluster.isMaster ) {
-			for(i=0; i<2; i++) {
+			for(i=0; i<require('os').cpus().length; i++) {
 				cluster.fork();
 			}
-			createServer();
+			cluster.on('exit', function(worker, code, signal) {
+				var exitCode = worker.process.exitCode;
+				console.log('Worker ' + worker.process.pid + ' died ('+exitCode+'). Restarting...');
+				cluster.fork();
+			});
 		} else {
 			createServer();
 		}
