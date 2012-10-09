@@ -6,7 +6,8 @@
 	"author": "Subho Sankar Banerjee <subs.zero@gmail.com>",
 	"keywords": [	"gbn", "tagore", "rabindranath", "gitobitan", "bengali" ],
 	"engines": {
-		"node": ">= 0.8.0"
+		"node": "0.8.x",
+    "npm": "1.1.x"
 	},
 	"dependencies": {
 		"commander": "*",
