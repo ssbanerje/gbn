@@ -1,6 +1,6 @@
 @font-face {
 	font-family: BenSen;
-	src: url('BenSen.ttf');
+	src: url('../fonts/BenSen.ttf');
 }
 
 .chromeframe {
@@ -90,7 +90,7 @@ button {
 body {
 	font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	line-height: 1.4em;
-	background: #eaeaea url('../images/bg.png');
+	background: #eaeaea url('../img/bg.png');
 	color: #4d4d4d;
 	width: 550px;
 	margin: 0 auto;
