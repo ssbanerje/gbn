@@ -100,15 +100,15 @@ program
 	.command('query <JSON_query>')
 	.description('Query the system without starting a server. Each query must be in JSON format')
 	.action(function (string) {
-		var i, results = database.queryDB(string);
     var database = require('./database.js');
+		var i, results = database.queryDB(string);
 		console.log(JSON.stringify(results, null, '\t'));
 		for(i in results) {
-                        if (program.lyrics) {
+			if (program.lyrics) {
 				console.log('Opening file ' +__dirname+'/'+results[i].lyrics);
 				openFile(__dirname + '/'+ results[i].lyrics);
 			}
-                        if (program.notation) {
+			if (program.notation) {
 				console.log('Opening file ' +__dirname+'/'+results[i].notation);
 				openFile(__dirname + '/' + results[i].notation);
 			}

@@ -28,15 +28,17 @@ git clone https://github.com/subszero/gbn.git
 npm install
 ```
 
-* Run the server
+##Run the App
+
+###On a server
 
 ```bash
 node main.js server
 ```
 
-##Features
+####Features
 
-###The Queries
+#####The Queries
 The site can be used to query the entire collection of songs written by Rabindranath Tagore.
 
 Queries are made in a simple JSON based query language. Songs can be searched on the basis of `name`, `raag`, `taal`, `parjaay`. Queries can be made using all these keys or a single one. Here is a sample query -
@@ -60,17 +62,32 @@ This will match all songs whose name starts with "aac". A more complicated query
 
 This will match all songs whose `name` starts with *aac*, of `raag` *Bhairavi*, of `taal` *Dadra* and `parjaay` *Prem*. However be careful that Bangla transliterations in English are not always universal.
 
-###The Results
+#####The Results
 Here is how the results are displayed -
 
-####Lyrics
+######Lyrics
 ![GBN](https://raw.github.com/subszero/gbn/master/README_files/lyrics.png)
 
-####Notations
+######Notations
 ![GBN](https://raw.github.com/subszero/gbn/master/README_files/notations.png)
 
-####Songs
+######Songs
 ![GBN](https://raw.github.com/subszero/gbn/master/README_files/youtube.png)
+
+
+###Query from the command line
+
+* Run the app from the command line using the following
+
+```bash
+./app.js query <JSON Query>
+```
+
+The JSON query is the same as in the server.
+
+####Open Files from terminal
+* You can use the `-l` or `--lyrics` command line option to open the lyrics.
+* You can use the `-n` or `--notation` command line option to open the notation.
 
 ##License
 
