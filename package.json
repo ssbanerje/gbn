@@ -21,6 +21,5 @@
 	"scripts": {
 		"start": "./app.js server"
 	},
-	"preferGlobal": "true",
 	"private": "true"
 }
