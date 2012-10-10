@@ -1,7 +1,7 @@
 {
 	"name": "GBN",
 	"description": "Gitabitan on demand",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"private": true,
 	"author": "Subho Sankar Banerjee <subs.zero@gmail.com>",
 	"keywords": [	"gbn", "tagore", "rabindranath", "gitobitan", "bengali" ],
