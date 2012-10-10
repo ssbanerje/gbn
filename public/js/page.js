@@ -44,9 +44,13 @@ angular.module('gbn', ['ui'])
 var Songs = function($scope, socket) {
 	// $scope Methods and Variables
 	$scope.queryText = '{"name": "abc"}'; // Text of the Query
+
 	$scope.song = {}; // The song which is being displayed
+
 	$scope.idx = 0;
+
 	$scope.results = []; // Results of running the Query
+
 	$scope.makeQuery = function () { // Make the query on server with Socket.io
 		var query = null;
 		try {
@@ -59,7 +63,8 @@ var Songs = function($scope, socket) {
 			spinner.spin(spinnerTarget);
 		}
 	};
-	$scope.setSong = function(idx) { // Get the lyrics of the requested Songs
+
+	$scope.setSong = function(idx) { // Set the song selected by user
 		spinner.spin(spinnerTarget);
 		var s = $scope.results[idx];
 		$.ajax({
@@ -68,24 +73,27 @@ var Songs = function($scope, socket) {
 				s.lyrics = data;
 			},
 			async: false
-    });
+		});
 		$scope.song = s;
 		$('#song-details').show('fast');
 		spinner.stop();
 	};
-	$scope.getYouTubeURL = function (string) {
+
+	$scope.getYouTubeURL = function (string) { // The youtube.com URL for the query we wan to execute
 		if(string!=undefined)
 			return 'http://www.youtube.com/embed/?listType=search&list='+string.replace(/ /g,'+')+'+tagore+bengali&showinfo=1';
 		else
 			return '';
 	};
-	$scope.clearResults = function () {
+
+	$scope.clearResults = function () { // Clear all results
 		$('#result-list').slideUp();
+		$scope.results = [];
 		$('#footer').hide();
 		spinner.stop();
 		hideSongDetails();
 	}
-	
+
 	// Handle Socket.io communications
 	socket.on('queryResponse', function (data){
 		$scope.results = data;
@@ -94,18 +102,22 @@ var Songs = function($scope, socket) {
 		$('#result-list').slideDown()
 		spinner.stop()
 	});
-	
+
 	// Private Methods
-	var hideSongDetails = function () {
+	var hideSongDetails = function () { //Hide the Song-Details section
+		$scope.song = {};
 		$('#song-details').hide('fast');
 	}
 };
+
+
+
 
 // Main() --- On load
 $(function () {
 	// Stop spinning
 	spinner.stop();
-	
+
 	// Toggle results listener
 	$('#toggle-button').click(function () {
 		$('#result-list').slideToggle();
@@ -125,5 +137,5 @@ $(function () {
 	$('.close').click(function () {
 		$('.overlay').fadeOut(200);
 	});
-	
+
 });
