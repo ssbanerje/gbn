@@ -11,38 +11,54 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<title>GBN • The Online Gitobitan Repository</title>
 		<link rel="stylesheet" type="text/css" href="/css/base.css">
+		<script src="js/vendor/modernizr-2.6.1-respond-1.1.0.min.js"></script>
 	</head>
 
 	<body>
 	<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
 	<a href="https://github.com/subszero/gbn"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
-		<div>
+		<div ng-controller="Songs">
 			<section id="gbn">
 				<header id="header">
 					<h1 id="main-heading">গীতবিতান</h1>
-					<input id="search-field" type="text" value='{"name": "abc"}' placeholder="JSON Query"/>
+					<input id="search-field" type="text" placeholder="JSON Query" ng-model="queryText" ui-keypress="{enter: foo()}"/>
 				</header>
 				<section id="main">
-					<ul id="result-list"></ul>
+					<ul id="result-list" ng-repeat="i in results">
+						<li ng-click="getDetails({{i}})">{{results[i].name}}</li>
+					</ul>
 				</section>
-				<footer id="footer" style="display: none;">
+				<footer id="footer" style='display: none'>
 					<button class="clear-results" id="toggle-button">Toggle</button>
-					<button class="clear-results" id="clear-results">Clear<span id='query-nos'></span></button>
+					<button class="clear-results" id="clear-results">Clear({{results.length}})</button>
 					<span id='spinner' style="float:right; padding:9px;"></span>
 				</footer>
 			</section>
 			<div id='song-details' style='display: none !important;'>
-				<section class='box' id='details'></section>
-				<section class='box' id='lyrics'></section>
-				<section class='box' id='notation'></section>
-				<section class='box' id='songs'></section>
+				<section class='box' id='details'>
+					<ul>
+						<li><b>Name:</b> {{results[song.idx].name}}</li>
+						<li><b>Taal:</b> {{results[song.idx].taal}}</li>
+						<li><b>Raag:</b> {{results[song.idx].raag}}</li>
+						<li><b>Parjaay:</b> {{results[song.idx].parjaay}}</li>
+					</ul>
+				</section>
+				<section class='box' id='lyrics'>{{song.lyrics}}</section>
+				<section class='box' id='notation'>
+					<img src="/{{results[song.idx].notation}}" width="100%" alt="Notation..."/>
+				</section>
+				<section class='box' id='songs'>
+					<iframe width="100%" height="300px"
+					 src="http://www.youtube.com/embed/?listType=search&list={{results[song.idx].name.replace(/ /g,'+')}}+tagore+bengali&showinfo=1"
+					 frameborder="0" allowfullscreen></iframe>
+				</section>
 			</div>
 			<footer id="info">
 				<p>
 					<span id='disclaimer'>Disclaimer</span> •
 					<span id='qquery'>Qualified Query</span>
 				</p>
-			<p>v0.1.1 • Subho Sankar Banerjee</p>
+			<p>Development Branch • Subho Sankar Banerjee</p>
 			</footer>
 		</div>
 		<div class="overlay" id="disclaimer-message">
@@ -76,6 +92,7 @@
 
 	<script src="/js/vendor/jquery.min.js"></script>
 	<script src="/js/vendor/angular.min.js"></script>
+	<script src="/js/vendor/angular-ui.min.js"></script>
 	<script src="/js/vendor/spin.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 
