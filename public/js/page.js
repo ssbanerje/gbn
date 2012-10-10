@@ -1,22 +1,18 @@
 // Setup the busy spinner
-var opts = {
-	lines: 7, // The number of lines to draw
-	length: 2, // The length of each line
-	width: 4, // The line thickness
-	radius: 3, // The radius of the inner circle
-	corners: 1, // Corner roundness (0..1)
-	rotate: 0, // The rotation offset
-	color: '#000', // #rgb or #rrggbb
-	speed: 1.7, // Rounds per second
-	trail: 49, // Afterglow percentage
-	shadow: false, // Whether to render a shadow
-	hwaccel: true, // Whether to use hardware acceleration
-	className: 'spinner', // The CSS class to assign to the spinner
-	zIndex: 2e9, // The z-index (defaults to 2000000000)
-	top: 'auto', // Top position relative to parent in px
-	left: 'auto' // Left position relative to parent in px
-};
-var spinner = new Spinner(opts).spin(document.getElementById('spinner'));
+var spinnerTarget = document.getElementById('spinner');
+var spinner = new Spinner({
+	lines: 10,
+	length: 5,
+	width: 2,
+	radius: 2,
+	corners: 1,
+	rotate: 0,
+	color: '#000',
+	speed: 1.7,
+	trail: 49,
+	shadow: false,
+	zIndex: 2e9
+}).spin(spinnerTarget);
 
 // The AngularJS module
 angular.module('gbn', ['ui'])
@@ -60,11 +56,11 @@ var Songs = function($scope, socket) {
 		}
 		if(query != null) {
 			socket.emit('query', query);
-			spinner.spin();
+			spinner.spin(spinnerTarget);
 		}
 	};
 	$scope.setSong = function(idx) { // Get the lyrics of the requested Songs
-		spinner.spin();
+		spinner.spin(spinnerTarget);
 		var s = $scope.results[idx];
 		$.ajax({
 			url:s.lyrics,
@@ -78,51 +74,42 @@ var Songs = function($scope, socket) {
 		spinner.stop();
 	};
 	$scope.getYouTubeURL = function (string) {
-		return 'http://www.youtube.com/embed/?listType=search&list='+string.replace(/ /g,'+')+'+tagore+bengali&showinfo=1';
+		if(string!=undefined)
+			return 'http://www.youtube.com/embed/?listType=search&list='+string.replace(/ /g,'+')+'+tagore+bengali&showinfo=1';
+		else
+			return '';
 	};
+	$scope.clearResults = function () {
+		$('#result-list').slideUp();
+		$('#footer').hide();
+		spinner.stop();
+		hideSongDetails();
+	}
 	
 	// Handle Socket.io communications
 	socket.on('queryResponse', function (data){
 		$scope.results = data;
-		//Page.hideSongDetails();
+		hideSongDetails();
 		$('#footer').show()
 		$('#result-list').slideDown()
-		//spinner.stop()
+		spinner.stop()
 	});
 	
 	// Private Methods
-};
-
-
-
-
-// The object to control page behavior
-var Page = {
-	toggleResults: function () {
-	  $('#result-list').slideToggle();
-	},
-
-	clearResults: function () {
-		$('#result-list').slideUp();
-		$('#footer').hide();
-		spinner.stop();
-		Page.hideSongDetails();
-	},
-
-	hideSongDetails: function () {
+	var hideSongDetails = function () {
 		$('#song-details').hide('fast');
 	}
 };
 
 // Main() --- On load
 $(function () {
+	// Stop spinning
 	spinner.stop();
-	// Clear result click listeners
-	$('#main-heading').click(Page.clearResults);
-	$('#clear-results').click(Page.clearResults);
-
+	
 	// Toggle results listener
-	$('#toggle-button').click(Page.toggleResults);
+	$('#toggle-button').click(function () {
+		$('#result-list').slideToggle();
+	});
 
 	// Click handlers for documentation links
 	$('#disclaimer').click(function () {
@@ -138,4 +125,5 @@ $(function () {
 	$('.close').click(function () {
 		$('.overlay').fadeOut(200);
 	});
+	
 });
