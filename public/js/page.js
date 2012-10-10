@@ -77,8 +77,8 @@ var Songs = function($scope, socket) {
 		$('#song-details').show('fast');
 		spinner.stop();
 	};
-	$scope.getYouTubeQuery = function (string) {
-		return string.replace(/ /g,'+');
+	$scope.getYouTubeURL = function (string) {
+		return 'http://www.youtube.com/embed/?listType=search&list='+string.replace(/ /g,'+')+'+tagore+bengali&showinfo=1';
 	};
 	
 	// Handle Socket.io communications
