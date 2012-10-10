@@ -13,6 +13,7 @@ Icon
 #Linux
 .*
 !.gitignore
+!.editorconfig
 *~
 
 #Editors
