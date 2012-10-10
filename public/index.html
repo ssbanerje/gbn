@@ -28,7 +28,7 @@
 				</header>
 				<section id="main">
 					<ul id="result-list">
-						<li ng-repeat="song in results" ng-click='setSong()'>{{song.name}}</li>
+						<li ng-repeat="s in results" ng-click="setSong($index)">{{s.name}}</li>
 					</ul>
 				</section>
 				<footer id="footer" style='display: none;'>
@@ -52,7 +52,7 @@
 				</section>
 				<section class='box' id='songs'>
 					<iframe width="100%" height="300px"
-					 src="http://www.youtube.com/embed/?listType=search&list={{results[song.idx].name.replace(/ /g,'+')}}+tagore+bengali&showinfo=1"
+					 src="http://www.youtube.com/embed/?listType=search&list={{getYouTubeQuery(song.idx.name)}}+tagore+bengali&showinfo=1"
 					 frameborder="0" allowfullscreen></iframe>
 				</section>
 			</div>

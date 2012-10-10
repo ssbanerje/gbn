@@ -16,14 +16,11 @@ var opts = {
 	top: 'auto', // Top position relative to parent in px
 	left: 'auto' // Left position relative to parent in px
 };
-var spinnerSpan = document.getElementById('spinner');
-var spinner = new Spinner(opts);
+var spinner = new Spinner(opts).spin(document.getElementById('spinner'));
 
 // The AngularJS module
-var AngApp = angular.module('gbn', ['ui']);
-
-// Socket.io for all controllers
-AngApp.factory('socket', function ($rootScope) {
+angular.module('gbn', ['ui'])
+       .factory('socket', function ($rootScope) {
 	var socket = io.connect(window.location.origin);
 	return {
 		on: function (eventName, callback) {
@@ -52,6 +49,7 @@ var Songs = function($scope, socket) {
 	// $scope Methods and Variables
 	$scope.queryText = '{"name": "abc"}'; // Text of the Query
 	$scope.song = {}; // The song which is being displayed
+	$scope.idx = 0;
 	$scope.results = []; // Results of running the Query
 	$scope.makeQuery = function () { // Make the query on server with Socket.io
 		var query = null;
@@ -62,27 +60,34 @@ var Songs = function($scope, socket) {
 		}
 		if(query != null) {
 			socket.emit('query', query);
-			spinner.spin(spinnerSpan);
+			spinner.spin();
 		}
-	}
-	$scope.setSong = function(song) { // Get the lyrics of the requested Songs
-		console.log(song);
-		spinner.spin(spinnerSpan);
-		$.get(song.lyrics, function(data) {
-				song.lyrics = data;
-		});
-		$scope.song = song;
+	};
+	$scope.setSong = function(idx) { // Get the lyrics of the requested Songs
+		spinner.spin();
+		var s = $scope.results[idx];
+		$.ajax({
+			url:s.lyrics,
+			success: function(data) {
+				s.lyrics = data;
+			},
+			async: false
+    });
+		$scope.song = s;
 		$('#song-details').show('fast');
 		spinner.stop();
-	}
+	};
+	$scope.getYouTubeQuery = function (string) {
+		return string.replace(/ /g,'+');
+	};
 	
 	// Handle Socket.io communications
 	socket.on('queryResponse', function (data){
 		$scope.results = data;
-		Page.clearSongDetails();
+		//Page.hideSongDetails();
 		$('#footer').show()
 		$('#result-list').slideDown()
-		spinner.stop()
+		//spinner.stop()
 	});
 	
 	// Private Methods
@@ -101,16 +106,17 @@ var Page = {
 		$('#result-list').slideUp();
 		$('#footer').hide();
 		spinner.stop();
-		Page.clearSongDetails();
+		Page.hideSongDetails();
 	},
 
-	clearSongDetails: function () {
+	hideSongDetails: function () {
 		$('#song-details').hide('fast');
 	}
 };
 
 // Main() --- On load
 $(function () {
+	spinner.stop();
 	// Clear result click listeners
 	$('#main-heading').click(Page.clearResults);
 	$('#clear-results').click(Page.clearResults);
