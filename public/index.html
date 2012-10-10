@@ -11,6 +11,10 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<title>GBN • The Online Gitobitan Repository</title>
 		<link rel="stylesheet" type="text/css" href="/css/base.css">
+		<script src="/js/vendor/jquery.min.js"></script>
+		<script src="/js/vendor/angular.min.js"></script>
+		<script src="/js/vendor/angular-ui.min.js"></script>
+	
 	</head>
 
 	<body>
@@ -20,11 +24,11 @@
 			<section id="gbn">
 				<header id="header">
 					<h1 id="main-heading">গীতবিতান</h1>
-					<input id="search-field" type="text" placeholder="JSON Query" ng-model="queryText" ui-keypress="{enter: 'foo()'}"/>
+					<input id="search-field" type="text" placeholder="JSON Query" ng-model="queryText" ui-keypress="{enter: 'makeQuery()'}"/>
 				</header>
 				<section id="main">
-					<ul id="result-list" ng-repeat="i in results">
-						<li ng-click="getDetails({{i}})">{{results[i].name}}</li>
+					<ul id="result-list">
+						<li ng-repeat="song in results" ng-click='setSong()'>{{song.name}}</li>
 					</ul>
 				</section>
 				<footer id="footer" style='display: none;'>
@@ -36,15 +40,15 @@
 			<div id='song-details' style='display: none !important;'>
 				<section class='box' id='details'>
 					<ul>
-						<li><b>Name:</b> {{results[song.idx].name}}</li>
-						<li><b>Taal:</b> {{results[song.idx].taal}}</li>
-						<li><b>Raag:</b> {{results[song.idx].raag}}</li>
-						<li><b>Parjaay:</b> {{results[song.idx].parjaay}}</li>
+						<li><b>Name:</b> {{song.name}}</li>
+						<li><b>Taal:</b> {{song.taal}}</li>
+						<li><b>Raag:</b> {{song.raag}}</li>
+						<li><b>Parjaay:</b> {{song.parjaay}}</li>
 					</ul>
 				</section>
 				<section class='box' id='lyrics'>{{song.lyrics}}</section>
 				<section class='box' id='notation'>
-					<img src="/{{results[song.idx].notation}}" width="100%" alt="Notation..."/>
+					<img src="/{{song.notation}}" width="100%" alt="Notation..."/>
 				</section>
 				<section class='box' id='songs'>
 					<iframe width="100%" height="300px"
@@ -89,9 +93,6 @@
 		</div>
 	</body>
 
-	<script src="/js/vendor/jquery.min.js"></script>
-	<script src="/js/vendor/angular.min.js"></script>
-	<script src="/js/vendor/angular-ui.min.js"></script>
 	<script src="/js/vendor/spin.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 

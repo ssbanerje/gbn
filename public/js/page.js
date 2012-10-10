@@ -51,10 +51,7 @@ AngApp.factory('socket', function ($rootScope) {
 var Songs = function($scope, socket) {
 	// $scope Methods and Variables
 	$scope.queryText = '{"name": "abc"}'; // Text of the Query
-	$scope.song = { // The song which is being displayed
-		idx : 0,
-		lyrics : ''
-	};
+	$scope.song = {}; // The song which is being displayed
 	$scope.results = []; // Results of running the Query
 	$scope.makeQuery = function () { // Make the query on server with Socket.io
 		var query = null;
@@ -68,17 +65,15 @@ var Songs = function($scope, socket) {
 			spinner.spin(spinnerSpan);
 		}
 	}
-	$scope.getDetails = function(idx) { // Get the lyrics of the requested song
+	$scope.setSong = function(song) { // Get the lyrics of the requested Songs
+		console.log(song);
 		spinner.spin(spinnerSpan);
-		$scope.song.idx = idx;
-		$.get($scope.results[idx].lyrics, function(data) {
-				$scope.song.lyrics = data;
+		$.get(song.lyrics, function(data) {
+				song.lyrics = data;
 		});
+		$scope.song = song;
 		$('#song-details').show('fast');
 		spinner.stop();
-	}
-	$scope.foo = function() {	// Test
-		alert('test');
 	}
 	
 	// Handle Socket.io communications
