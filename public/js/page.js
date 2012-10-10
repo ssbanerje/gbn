@@ -55,17 +55,7 @@ var Songs = function($scope, socket) {
 		idx : 0,
 		lyrics : ''
 	};
-	$scope.results = [ // Results of running the Query
-		{
-			taal: '',
-			date: '',
-			name: '',
-			raag:'',
-			parjaay: '',
-			notation: '',
-			lyrics: ''
-		}
-	];
+	$scope.results = []; // Results of running the Query
 	$scope.makeQuery = function () { // Make the query on server with Socket.io
 		var query = null;
 		try {
