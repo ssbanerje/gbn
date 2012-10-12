@@ -58,7 +58,7 @@ function createServer (PORT) {
 
 	var io = require('socket.io').listen(server);
 	io.set('log level', 2);
-  var database = require('./database.js');
+	var database = require('./database.js');
 	setInterval(database.updateManifest, 600000);
 
 	io.sockets.on('connection', function(socket){
@@ -100,7 +100,7 @@ program
 	.command('query <JSON_query>')
 	.description('Query the system without starting a server. Each query must be in JSON format')
 	.action(function (string) {
-    var database = require('./database.js');
+		var database = require('./database.js');
 		var i, results = database.queryDB(string);
 		console.log(JSON.stringify(results, null, '\t'));
 		for(i in results) {
@@ -120,9 +120,9 @@ program
 	.command('server')
 	.description('Start a HTTP server')
 	.action(function () {
-		createServer(3000);
+		createServer(8080);
 		if (program.browser) {
-			openFile('http://localhost:3000/');
+			openFile('http://localhost:8080/');
 		}
 	});
 
@@ -131,5 +131,5 @@ program.parse(process.argv);
 
 // Fallback - Display help
 if (!program.args.length) {
-        program.outputHelp();
+	program.outputHelp();
 }
