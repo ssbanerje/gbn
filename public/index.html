@@ -48,11 +48,11 @@
 				</section>
 				<section class='box' id='lyrics'>{{song.lyrics}}</section>
 				<section class='box' id='notation'>
-					<img src="/{{song.notation}}" width="100%" alt="Notation..."/>
+					<img ng-src="/{{song.notation}}" width="100%" alt="Notation..."/>
 				</section>
 				<section class='box' id='songs'>
 					<iframe width="100%" height="300"
-					 src="{{getYouTubeURL(song.name)}}"
+					 ng-src="{{getYouTubeURL(song.name)}}"
 					 frameborder="0" allowfullscreen></iframe>
 				</section>
 			</div>
