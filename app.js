@@ -26,7 +26,7 @@ function createServer (PORT) {
 	var app = express();
 
 	app.configure(function () {
-		app.set('port', process.env.app_port || PORT);
+		app.set('port', process.env.PORT || PORT);
 		app.set('views', __dirname + '/views');
 		app.set('view engine', 'ejs');
 		app.use(express.favicon());
@@ -120,9 +120,9 @@ program
 	.command('server')
 	.description('Start a HTTP server')
 	.action(function () {
-		createServer(8080);
+		createServer(5000);
 		if (program.browser) {
-			openFile('http://localhost:8080/');
+			openFile('http://localhost:5000/');
 		}
 	});
 
