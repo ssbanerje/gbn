@@ -24,7 +24,7 @@
 			<section id="gbn">
 				<header id="header">
 					<h1 id="main-heading">গীতবিতান</h1>
-					<input id="search-field" type="text" placeholder="JSON Query" ng-model="queryText" ui-keypress="{enter: 'makeQuery()'}"/>
+					<input id="search-field" type="text" placeholder="JSON Query" ng-model="queryText" ui-keypress="{enter: 'makeQuery()'}" autofocus/>
 				</header>
 				<section id="main">
 					<ul id="result-list">
@@ -51,7 +51,7 @@
 					<img src="/{{song.notation}}" width="100%" alt="Notation..."/>
 				</section>
 				<section class='box' id='songs'>
-					<iframe width="100%" height="300px"
+					<iframe width="100%" height="300"
 					 src="{{getYouTubeURL(song.name)}}"
 					 frameborder="0" allowfullscreen></iframe>
 				</section>
@@ -91,25 +91,20 @@
 				<p>This will match all songs whose name starts with <i>"aac"</i>, of raag <i>"Bhairavi"</i>, of taal <i>"Dadra"</i> and parjaay <i>"Prem"</i>. However be careful that Bangla transliterations in English are not always universal.</p>
 			</div>
 		</div>
+
+		<script src="/js/vendor/spin.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="/js/page.js"></script>
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-33437564-1']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
 	</body>
-
-	<script src="/js/vendor/spin.min.js"></script>
-	<script src="/socket.io/socket.io.js"></script>
-
-	<script src="/js/page.js"></script>
-
-
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-33437564-1']);
-		_gaq.push(['_trackPageview']);
-
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-
 </html>
 

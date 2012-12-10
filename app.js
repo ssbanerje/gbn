@@ -26,7 +26,7 @@ function createServer (PORT) {
 	var app = express();
 
 	app.configure(function () {
-		app.set('port', process.env.app_port || PORT);
+		app.set('port', process.env.PORT || PORT);
 		app.set('views', __dirname + '/views');
 		app.set('view engine', 'ejs');
 		app.use(express.favicon());
@@ -58,7 +58,7 @@ function createServer (PORT) {
 
 	var io = require('socket.io').listen(server);
 	io.set('log level', 2);
-  var database = require('./database.js');
+	var database = require('./database.js');
 	setInterval(database.updateManifest, 600000);
 
 	io.sockets.on('connection', function(socket){
@@ -100,15 +100,15 @@ program
 	.command('query <JSON_query>')
 	.description('Query the system without starting a server. Each query must be in JSON format')
 	.action(function (string) {
+		var database = require('./database.js');
 		var i, results = database.queryDB(string);
-    var database = require('./database.js');
 		console.log(JSON.stringify(results, null, '\t'));
 		for(i in results) {
-                        if (program.lyrics) {
+			if (program.lyrics) {
 				console.log('Opening file ' +__dirname+'/'+results[i].lyrics);
 				openFile(__dirname + '/'+ results[i].lyrics);
 			}
-                        if (program.notation) {
+			if (program.notation) {
 				console.log('Opening file ' +__dirname+'/'+results[i].notation);
 				openFile(__dirname + '/' + results[i].notation);
 			}
@@ -120,9 +120,9 @@ program
 	.command('server')
 	.description('Start a HTTP server')
 	.action(function () {
-		createServer(3000);
+		createServer(5000);
 		if (program.browser) {
-			openFile('http://localhost:3000/');
+			openFile('http://localhost:5000/');
 		}
 	});
 
@@ -131,5 +131,5 @@ program.parse(process.argv);
 
 // Fallback - Display help
 if (!program.args.length) {
-        program.outputHelp();
+	program.outputHelp();
 }
