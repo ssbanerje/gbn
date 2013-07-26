@@ -100,8 +100,7 @@ The JSON query is the same as in the server.
  copies of this license document, and changing it is allowed as long 
  as the name is changed. 
 
-             DO I LOOK LIKE I GIVE A SHIT PUBLIC LICENSE 
-   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION 
+###Terms and Conditions for Copying, Distribution ad Modfification 
 
   0. I don't give a shit what you do, just don't bother me with it.
 
