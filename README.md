@@ -4,7 +4,7 @@
 
 This is a web portal providing easy access to entire corpus of songs written by Rabindranath Tagore
 
-![GBN](https://raw.github.com/subszero/gbn/master/README_files/gbn.png)
+![GBN](https://raw.github.com/ssbanerje/gbn/master/README_files/gbn.png)
 
 
 ##Installation
@@ -19,7 +19,7 @@ But if you want to run it yourself, you will need to -
 * Clone the repository
 
 ```bash
-git clone https://github.com/subszero/gbn.git
+git clone https://github.com/ssbanerje/gbn.git
 ```
 
 * Download all dependencies
@@ -66,13 +66,13 @@ This will match all songs whose `name` starts with *aac*, of `raag` *Bhairavi*, 
 Here is how the results are displayed -
 
 ######Lyrics
-![GBN](https://raw.github.com/subszero/gbn/master/README_files/lyrics.png)
+![GBN](https://raw.github.com/ssbanerje/gbn/master/README_files/lyrics.png)
 
 ######Notations
-![GBN](https://raw.github.com/subszero/gbn/master/README_files/notations.png)
+![GBN](https://raw.github.com/ssbanerje/gbn/master/README_files/notations.png)
 
 ######Songs
-![GBN](https://raw.github.com/subszero/gbn/master/README_files/youtube.png)
+![GBN](https://raw.github.com/ssbanerje/gbn/master/README_files/youtube.png)
 
 
 ###Query from the command line
